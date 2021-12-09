@@ -1,0 +1,38 @@
+<ion-header> 
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Rset Password</ion-title>
+  </ion-toolbar>
+ </ion-header>
+
+<ion-content class="ion-padding background"> 
+ <ion-grid> 
+  <ion-row> 
+    <ion-col> 
+
+      <form #f="ngForm" (ngSubmit)="onSubmit()" novalidate> 
+        <ion-item class="formItem"> 
+          <ion-label position="floating"> 
+            <ion-icon name="mail"> </ion-icon >
+             email address
+          </ion-label> 
+          <ion-input name="email" [(ngModel)]="email">  </ion-input> 
+        </ion-item> 
+
+        <div class="ion-margin-vertical">
+          <ion-button class="submitBtn" expand="block" [disabled]="!f.valid" type="submit">
+            Submit
+          </ion-button>
+        </div>
+
+        <h3 class="ion-margin">
+          {{ res }}
+        </h3>
+
+      </form> 
+    </ion-col> 
+  </ion-row> 
+ </ion-grid> 
+ </ion-content>

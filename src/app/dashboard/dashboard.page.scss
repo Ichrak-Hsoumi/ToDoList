@@ -1,0 +1,15 @@
+ion-content.background{
+    --background: url(../../assets/img/bgToDo.jpg) 0 0/100% 100% no-repeat;
+}
+
+#bottom{
+    position: absolute;
+    bottom: 60px;
+    padding: 5px;
+    left: 0;
+    right: 0;
+}
+
+#bord{
+    border: 2px rgb(72, 143, 236) solid;
+}

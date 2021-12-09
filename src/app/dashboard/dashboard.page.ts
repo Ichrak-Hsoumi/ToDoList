@@ -4,29 +4,65 @@ import { IonicAuthService } from '../services/authentication.service';
 import { AngularFireDatabase } from '@angular/fire/compat/database';
 
 @Component({
-  selector: 'app-home',
-  templateUrl: 'home.page.html',
-  styleUrls: ['home.page.scss'],
+  selector: 'app-dashboard',
+  templateUrl: './dashboard.page.html',
+  styleUrls: ['./dashboard.page.scss'],
 })
-export class HomePage implements OnInit {
 
+export class DashboardPage implements OnInit {
   currentDate = new Date();
   myTask = '';
   addTask: boolean;
   tasks = [];
   count: number;
+  userDetail='';
 
-  constructor(public afDB: AngularFireDatabase,
+  constructor(
+    public afDB: AngularFireDatabase,
     private router: Router,
-    private ionicAuthService: IonicAuthService
-  ) { 
-    this.getTasks();
+    private ionicAuthService: IonicAuthService) { 
   }
 
   ngOnInit() {
+    //Utiliser userDetails pour ajouter un champ nommé user au tasks qui contient l'email d'utilisateur 
+    //pour afficher selement les tasks de cet utilisateur lors de login 
+    this.ionicAuthService.userDetails().subscribe(response => {
+      if (response !== null) {
+        this.userDetail = response.email;
+      } else {
+        this.router.navigateByUrl('');
+      }
+    }, error => {
+      console.log(error);
+    })
+    // if (this.userDetail==this.tasks.map(o=>o.user)) {
+    //   this.getTasks();
+    // }
+    this.getTasks();
+  }
+
+
+  
+  //Afficher le formulaire pour ajouter une tache
+  showForm() {
+    this.addTask = !this.addTask;
+    this.myTask = '';
   }
   
 
+  //Enregister une tache dans notre base des données
+  addTaskToFirebase() {
+    this.afDB.list('Tasks/').push({
+      text: this.myTask,
+      date: new Date().toISOString(),
+      checked: false,
+      user : this.userDetail
+    });
+    this.showForm();
+    //Incrémenter la valeur de count(ion-badge)
+    this.count=this.tasks.length
+    this.count=this.count+1;
+  }
 
   //Parcourir notre base firebase Tasks/ et récupérer les informations de nos tâches
   getTasks() {
@@ -61,5 +97,4 @@ export class HomePage implements OnInit {
         console.log(error);
       })
   }
-
 }
